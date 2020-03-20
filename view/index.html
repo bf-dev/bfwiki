@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <title>{{title}} - 블플위키</title>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.css" integrity="sha384-bsHo4/LA+lkZv61JspMDQB9QP1TtO4IgOf2yYS+J6VdAYLVyx1c3XKcsHh0Vy8Ws" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.js" integrity="sha384-4z8mjH4yIpuK9dIQGR1JwbrfYsStrNK6MP+2Enhue4eyo0XlBDXOIPc8b6ZU0ajz" crossorigin="anonymous"></script>
+    <script src="/render.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" integrity="sha256-46qynGAkLSFpVbEBog43gvNhfrOj+BmwXdxFgVK/Kvc=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+
+    <style>
+        html {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        #tool {
+            float: right;
+        }
+        
+        #data {
+            min-height: calc( 100vh - 100px);
+            flex: 1;
+            max-width: 970px;
+            background-color: white;
+            border-bottom: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            position: relative;
+            right:1px;
+        }
+        
+        body {
+            background-color: #efefef;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        .nav {
+            margin: 0 auto;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+        }
+        
+        .nav li {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            float: left;
+            color: white;
+        }
+        
+        .nav li a {
+            color: #fff!important;
+            font-size: 1rem;
+            padding: .7rem;
+            display: inline-flex;
+            vertical-align: top;
+        }
+        
+        .nav li i {
+            margin-right: 0.3em;
+            font-size: 1rem;
+        }
+        .right {
+            float: right !important;
+            margin-right: .4rem !important;
+        }
+        
+        .nav-wrapper {
+            background-color: #333;
+        }
+        
+        .nav-div {
+            margin: 0 auto;
+            max-width: 1300px;
+        }
+        
+        .nav-icon-span {
+            position: relative;
+            top: 2px;
+        }
+        #recent{
+            float:left;
+        }
+        #title{
+            padding: 20px 0px 0px 20px;
+            color: #363636;
+            margin:0;
+        }
+        #tool a:not(:first){
+            border-left:none !important;
+        }
+        #tool a{
+            font-size: .9rem;
+            padding: .3rem .8rem;
+            position: relative;
+            float: left;
+            color: #373a3c!important;
+            background-color: #fff;
+            display: inline-block;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            border: .0625rem solid #ccc;
+            transition: background-color ease-in-out 0.1s;
+        }
+        #tool a:hover{	
+            background-color: lightgray;
+        }
+        .content{
+            padding:20px;
+            
+        }
+        @media screen and (max-width:37.5em) {
+            #tool{
+                float:left !important;
+                margin-left:20px;
+            }
+            .content{
+                margin-top:25px;
+            }
+            .nav-text{
+                display: none;
+            }
+        }
+        @media screen and (min-width:960px) {
+            #data{
+                float:left;
+                width:72%;
+            }
+        }
+        @media screen and (max-width:960px) {
+            .recent{
+                display: none;
+            }
+            #data{
+                right:0;
+            }
+        }
+        .recent{
+            float: left;
+            
+        }
+        .data-wrapper{
+            margin:0 auto;
+            max-width: 1300px;
+        }
+        /* unvisited link */
+        a:link {
+            transition: color ease-in-out 0.1s;
+            color: #0275d8;
+            text-decoration: none;
+        }
+
+        /* visited link */
+        a:visited {
+            color: #0275d8;
+            
+        }
+
+        /* mouse over link */
+        a:hover {
+            color: #0275d8;
+        }
+
+        /* selected link */
+        a:active {
+            color: #0275d8;
+        }
+        .search-input{
+            position: relative;
+            width: calc( 100% - 40px);
+            height: 100%;
+            padding: .25rem .5rem;
+            margin: 0;
+            border-radius: 0;
+            color: #55595c;
+            background-color: #fff;
+            background-image: none;
+            border: .0625rem solid #ccc;
+            font-size: .9rem;
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            height: 35px;
+        }
+        .left{
+            float:left;
+        }
+        .butn{
+            width: 40px;
+            height: 35px;
+            position: relative;
+            background-color: white;
+            border: .0625rem solid #ccc;
+            border-left: none;
+            margin-right:0 !important;
+        }
+        .search-container{
+        }
+
+        textarea {
+            font-family: sans-serif;
+            padding: 10px;
+            width: calc(100% - 20px);
+            font-size: .9rem;
+        }
+
+        .butn i{
+            position:relative;
+            top:2px;
+        }
+
+        @import url(//fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
+        @import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+        em {
+        font-style: italic;
+        }
+        .NEHeadIcon del {
+        color: white;
+        }
+        .NamaEditor {
+        margin: 0;
+        }
+        .NamaEditor.NEMenu {
+        background: #333333;
+   
+        width: 100%;
+        min-width: 100%;
+        }
+        .NamaEditor.NETextarea {
+        width: 100% !important;
+        box-sizing: border-box;
+        }
+        .NamaEditor.NEMenuButton {
+        font-size: 13pt;
+        font-family: 'Nanum Myeongjo' !important;
+        background: #333333;
+        vertical-align: middle;
+        border: none;
+        color: white;
+        width: 40px !important;
+        height: 40px !important;
+        cursor: pointer;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 40px;
+        min-width: 40px !important;
+        }
+        .NamaEditor.NEright {
+        float: right;
+        }
+        .NamaEditor .NEMenuButton i{
+        position:relative;
+        top:6px;
+}
+        .NamaEditor.NEMenuButton:hover, .NamaEditor.NEMenuButton[hover] {
+        background: #646771;
+        }
+        .NamaEditor.NEMenuButton[active], button.NamaEditor.NEMenuButton:active {
+        background: #777A82;
+        }
+        .NamaEditor.NEMenuButton > .NamaEditor.NEDropDown {
+        position: absolute;
+        z-index: 4;
+        background: gray;
+        min-width: 40px;
+        margin: 0px;
+        padding-right: 10px;
+        max-height: 400px;
+        }
+        div.NamaEditor.NEMenuButton {
+        display: inline-block;
+        }
+        .NamaEditor.NEDropDown > ul {
+        list-style: inside none none;
+        float: left;
+        margin: 0px 0px 0px 10px;
+        padding: 0px !important;
+        }
+        .NamaEditor.NEDropDown ul > li {
+        margin: 5px;
+        padding: 0px;
+        }
+        .NamaEditor.NEMenuButton > div.NamaEditor.NEDropdownButtonLabel, .NamaEditor.NEMenuButton > div.NamaEditor.NEDropdownButtonLabel * {
+        text-align: center;
+        height: 100%;
+        width: 100%;
+        line-height: 39pt;
+        font-size: 15pt;
+        }
+        .NamaEditor.NEDropDown ul li > span.NEHeadIcon {
+        font-family: 'Nanum Myeongjo' !important;
+        font-size: 30px;
+        line-height: 40px;
+        text-align: center;
+        width: 35px;
+        display: inline-block;
+        }
+        .NamaEditor.NEDropDown ul li > span.NEDescText {
+        font-family: 'Nanum Gothic' !important;
+        font-size: 10pt;
+        margin-left: 10px;
+        }
+        .recent{
+            width: 24.8473%;
+            margin-left: calc( 3% - 1px);
+
+        }
+        .recent-update{
+            margin:0;
+            overflow: hidden;
+            padding:0;
+            background-color: white;
+            border-top: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            margin-top:10px;
+        }
+        .title{
+            color:black;
+        }
+        .recent-user{
+            color:gray;
+            float:right;
+            margin-right:20px;
+        }
+        .recent-update li{
+            width:100%;
+            display: block;
+            border-bottom: 1px solid #ccc;
+            word-wrap: break-word;
+            padding: .3rem 3.3rem .3rem .5rem;
+            background-color: transparent;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-wrap: normal;
+            white-space: nowrap;
+        }
+        .ntitle{
+            margin-top:34.59px;
+        }
+        .adimage{
+            padding:0 !important;
+        }
+        .alert{
+            background-color: #f0ef75;
+            padding: .3rem 1rem;
+            border-bottom: 1px solid #ccc;
+            font-size:15px;
+            box-shadow: 0 0 0 1px #ccc inset;
+        }
+        .alert span{
+            float:right;
+        }
+        #save{
+            color: #fff;
+            background-color: #0275d8;  
+            border: none;
+            padding: 0;
+            font: inherit;
+            cursor: pointer;
+            outline: inherit;
+            padding: 4px 10px;
+        }
+        input{
+            display: inline-block;
+            margin: 0 0 0 .7rem;
+            width: calc(100% - 40px);
+            border-radius: 0;
+            padding: .25rem .5rem;
+            font-size: .9rem;
+            line-height: 1.5;
+            color: #55595c;
+            background-color: #fff;
+            background-image: none;
+            border: .0625rem solid #ccc;
+        }
+        .login_button{
+            margin-top:20px;
+        }
+        .user_info_ul{
+            margin:0;
+        }
+        #tool a:not(:first-child) {
+            border-left: none;
+        }
+    </style>
+    <!--            @media (max-width: 780px) { .hidenav{display: none;}}
+            @media (max-width: 768px) { table { min-width: 100%; } }
+            @media (min-width: 1024px) { #data { width: 80%; margin: auto; padding: 10px;border-left: 1px solid #ccc;border-right: 1px solid #ccc; } }
+            @media (min-width: 1920px) { #data { width: 60%; } }-->
+    {{imp[1][5]|safe}} {{imp[2][3]|safe}}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    <!--<form method="post" action="/search" id="searchform" role="search">
+                <input class="uk-input uk-form-width-small" type="text" name="search" placeholder="검색">
+                <button class="uk-button uk-button-default">검색</button>
+            </form>-->
+    <div class="nav-wrapper">
+        <nav class="nav-div">
+            <ul class="nav">
+                <li class="title"><a href="/" style="font-size: 1.04rem;">블플위키</a></li>
+                <li><a href="/recent_changes"><span class="nav-icon-span"><i class="material-icons">explore</i></span><span class="nav-text">최근 변경</span></a></li>
+                <li><a href="/recent_discuss"><span class="nav-icon-span"><i class="material-icons">chat</i></span><span class="nav-text">최근 토론</span></a></li>
+                <li><a href="/random"><span class="nav-icon-span"><i class="material-icons">shuffle</i></span><span class="nav-text">무작위 문서</span></a></li>
+                <li><a href="/other"><span class="nav-icon-span"><i class="material-icons">more_horiz</i></span><span class="nav-text">기타</span></a></li>
+
+                {% if username != false %}
+                <li class="right"><a href="/user"><span class="nav-icon-span"><i class="material-icons">account_circle</i></span><span class="nav-text">{{username}}</span></a></li>
+                {% else %}
+                <li class="right"><a href="/login"><span class="nav-icon-span"><i class="material-icons">account_circle</i></span><span class="nav-text">로그인</span></a></li>
+                {% endif %}
+                <div class="search-container">
+                    <form method="post" action="/search" id="search" role="search">
+                        <input class="search-input" id="search_input" name="search" placeholder="검색" autocomplete="off" type="search">
+                        <button class="right butn" type="submit" formaction="/search"><i class="material-icons">search</i></button>
+                    </form>
+                </div>
+            </ul>
+        </nav>
+    </div>
+    <div>
+        <div class="data-wrapper">
+            <div id="data">
+                <h1 id="title">
+                    {{title}}
+                    {% if imp[3][0] != 0 %}
+                        <sub>{{imp[3][0]}}</sub>
+                    {% endif %}
+                    
+                </h1>
+                <div id="tool">
+                    {% if menu != 0 %} {% for sub_d in menu %}
+                    <a href="/{{sub_d[0]}}">{{sub_d[1]}}</a>
+                     {% endfor %}<span style="margin-left: 50px"></span>{% endif %}
+                </div>
+                <div class="content" id="content">{% if protect == true %}{{data}}{% else %}{{data|safe}}{% endif %}</div>
+                <hr>
+                <a href="/info" style="margin-left:20px;margin-top:20px">정보</a>
+            </div>
+            <div class="recent">
+                <ul class="recent-update">
+                    <li class="title">최근 변경</li>
+                    <RecentChanges></RecentChanges>
+                </ul>
+                <ul class="recent-update">
+                    <li class="title">광고 <span class="recent-user">문의 : 0545) 974-9292</span></li>
+                    <li class="adimage"><img src="광고가 없습니다."></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="/editor.js"></script>
+<script>
+
+    	jQuery.ajax({
+			url: "/api/recent_changes", // 호출 URL
+			dataType:'json'
+		}).done(function(res){
+            res.forEach(element => {
+                $("RecentChanges").append(`<li><a href="/w/${element[[1]]}">${element[[1]]}</a> <span class='recent-user'>${element[3]}</li>`)
+            });
+        })
+        $('#content textarea').NamaEditor({
+            docName: '{{imp[0]}}',
+            section: 2
+        });
+        function alert(content){
+            content += "<span></span>"
+            $(".alert").show()
+            $(".alert").html(content)
+            setTimeout(() => {
+                $(".alert").fadeOut()
+            }, 2000);
+        }
+        jQuery.ajax({
+            url:"/api/w/블플위키:광고",
+            dataType:'json'
+        }).done(function(res){
+            $(".adimage").html(res.data)
+        })
+        function preview(){
+            $.get({
+                url:"/api/markdown",
+                dataType:'json'
+            },{
+                data:$("textarea")[0].value
+            }).done(function(res){
+                console.log(res)
+                $('#preview').html(res.result)
+            })
+        }
+        function redirect(url){
+            window.location.href = url
+        }
+        function send_email(){
+            $.post( "/email", { email: $("#email").val() } );
+            $(".emailsendbtn").hide();
+            setTimeout(()=>{$(".emailsendbtn").show()})
+        }
+        {% if protect == true %}
+        $("#content").hide()
+        setTimeout(
+            ()=>{render_namumark("content");$("#content").show()},
+            1
+        )
+        {% endif %}      
+</script>
+
+</html>
