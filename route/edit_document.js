@@ -11,7 +11,6 @@ async function checkPermission(req,type){
 		var UserACL = ["any"] //비로그인 유저의 경우 any 권한만 부여
 	}
 	const DocumentACL = (await getACL.getDocumentACL(req.params.document))[type] //문서의 ACL 구하기
-	console.log(UserACL,DocumentACL,type)
 	const Match = DocumentACL.filter(x => UserACL.includes(x)).length != 0
 	return Match //일치하는 권한이 없을 때 false, 있을때는 true
 }
@@ -42,7 +41,6 @@ module.exports = function (app){
 		if(!await checkPermission(req,"Edit")){return res.redirect(`/edit/${req.params.document}?err=편집 권한이 없습니다.`)}
 		if(req.body.content == ""){return res.redirect(`/edit/${req.params.document}?err=문서 내용이 없습니다.`)}
 		if(!DocumentStatus){if(req.body.content == GetDocument.Data){return res.redirect(`/edit/${req.params.document}?err=문서 내용이 같습니다.`)}}
-		console.log(req.body, getUser.getName(req))
 		await getDocument.editDocument(req.params.document, req.body.content, getUser.getName(req), req.body.cause)
 		res.redirect(`/w/${req.params.document}`)
 	})

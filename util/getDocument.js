@@ -6,8 +6,6 @@ const History = require("./schema/history")
 exports.editDocument = async function(title, data, user, comment){
 	const result = await Document.findOne({Title: title})
 	const result_history = await History.find().sort("Rev").findOne({Title:title})//One({Title: title})
-	console.log(result_history)
-	console.log(result)
 	const check = (result == null)
 	if(check){
 		const NewDocument = new Document()
@@ -43,7 +41,6 @@ exports.editDocument = async function(title, data, user, comment){
 		NewDocument.ACL_EditRequest = result.ACL_EditRequest
 		NewDocument.LastEdit = new Date()
 		await NewDocument.save()
-		console.log(data.length,result)
 		const NewHistory = new History()
 		NewHistory.Title = title
 		NewHistory.Rev = result_history.Rev + 1
